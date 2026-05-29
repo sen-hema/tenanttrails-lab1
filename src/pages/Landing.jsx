@@ -1,37 +1,30 @@
+import { Link } from 'react-router-dom'
 import './Landing.css'
 
-export default function Landing({ goTo }) {
+export default function Landing() {
   return (
     <div className="landing">
       <nav className="landing-nav">
         <span className="landing-logo">TenantTrails</span>
         <div className="landing-nav-right">
-          <button className="btn-ghost" onClick={() => goTo('login')}>Sign In</button>
-          <button className="btn-primary" onClick={() => goTo('login')}>Get Started</button>
+          <Link to="/login" className="btn-ghost">Sign In</Link>
+          <Link to="/signup" className="btn-primary">Get Started</Link>
         </div>
       </nav>
 
       <main className="landing-hero">
         <div className="launch-badge">Launching in Halifax, Nova Scotia</div>
-
         <h1 className="hero-title">
           Know what you're signing<br />before you sign it.
         </h1>
-
         <p className="hero-subtitle">
           Read honest reviews from past tenants. See AI-generated summaries.<br />
           Make informed decisions about where you live.
         </p>
-
         <div className="hero-cta">
-          <button className="btn-primary btn-large" onClick={() => goTo('login')}>
-            Create Free Account
-          </button>
-          <button className="btn-outline btn-large" onClick={() => goTo('login')}>
-            Sign In
-          </button>
+          <Link to="/signup" className="btn-primary btn-large">Create Free Account</Link>
+          <Link to="/login" className="btn-outline btn-large">Sign In</Link>
         </div>
-
         <div className="features-row">
           <div className="feature-item">
             <span className="feature-emoji">⭐</span>

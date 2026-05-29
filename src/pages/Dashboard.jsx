@@ -1,72 +1,15 @@
+import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import { mockApartments } from '../data/mockData'
 import './Dashboard.css'
 
-const apartments = [
-  {
-    id: 1,
-    name: 'The Marlstone',
-    address: '5540 Spring Garden Rd',
-    neighbourhood: 'Spring Garden',
-    rating: 5.0,
-    reviews: 1,
-    tags: [],
-    noAI: true,
-    img: 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400&h=220&fit=crop',
-  },
-  {
-    id: 2,
-    name: 'Park Victoria',
-    address: '1496 Carlton St',
-    neighbourhood: 'South End',
-    rating: 4.5,
-    reviews: 2,
-    tags: ['Well maintained', 'Quiet', 'Expensive'],
-    noAI: false,
-    img: 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=400&h=220&fit=crop',
-  },
-  {
-    id: 3,
-    name: 'Le Marchant Towers',
-    address: '1585 Le Marchant St',
-    neighbourhood: 'West End',
-    rating: 3.7,
-    reviews: 3,
-    tags: ['Good location', 'Parking limited', 'Aging building'],
-    noAI: false,
-    img: 'https://images.unsplash.com/photo-1560448204-e02f11c3d0e2?w=400&h=220&fit=crop',
-  },
-  {
-    id: 4,
-    name: 'Fenwick Tower',
-    address: '5599 Fenwick St',
-    neighbourhood: 'Downtown',
-    rating: 3.3,
-    reviews: 3,
-    tags: ['Elevator issues', 'Great views', 'Security concerns'],
-    noAI: false,
-    img: 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?w=400&h=220&fit=crop',
-  },
-  {
-    id: 5,
-    name: 'Southpoint Apartments',
-    address: '1050 South Park St',
-    neighbourhood: 'South End',
-    rating: 2.5,
-    reviews: 4,
-    tags: [],
-    noAI: true,
-    img: 'https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=400&h=220&fit=crop',
-  },
-]
-
 function Stars({ rating }) {
-  const full = Math.floor(rating)
-  const half = rating % 1 >= 0.5
-  const empty = 5 - full - (half ? 1 : 0)
   return (
     <div className="stars">
-      {'★'.repeat(full)}
-      {half ? '★' : ''}
-      {'☆'.repeat(empty)}
+      {[1, 2, 3, 4, 5].map(i => (
+        <span key={i} className={i <= Math.round(rating) ? 'star-full' : 'star-empty'}>★</span>
+      ))}
     </div>
   )
 }
@@ -84,8 +27,7 @@ function ApartmentCard({ apt }) {
       <div className="apt-body">
         <h3 className="apt-name">{apt.name}</h3>
         <p className="apt-address">
-          <span className="pin">📍</span>
-          {apt.address} · {apt.neighbourhood}
+          📍 {apt.address} · {apt.neighbourhood}
         </p>
         <div className="apt-tags">
           {apt.noAI
@@ -102,7 +44,47 @@ function ApartmentCard({ apt }) {
   )
 }
 
-export default function Dashboard({ user, onSignOut }) {
+export default function Dashboard() {
+  const { user, logout } = useAuth()
+  const navigate = useNavigate()
+
+  const [search, setSearch] = useState('')
+  const [neighbourhood, setNeighbourhood] = useState('All Neighbourhoods')
+  const [sortBy, setSortBy] = useState('Highest Rated')
+  const [filtered, setFiltered] = useState(mockApartments)
+
+  const neighbourhoods = ['All Neighbourhoods', ...new Set(mockApartments.map(a => a.neighbourhood))]
+
+  useEffect(() => {
+    let result = [...mockApartments]
+
+    if (search.trim()) {
+      const q = search.toLowerCase()
+      result = result.filter(a =>
+        a.name.toLowerCase().includes(q) ||
+        a.address.toLowerCase().includes(q) ||
+        a.neighbourhood.toLowerCase().includes(q)
+      )
+    }
+
+    if (neighbourhood !== 'All Neighbourhoods') {
+      result = result.filter(a => a.neighbourhood === neighbourhood)
+    }
+
+    if (sortBy === 'Highest Rated') result.sort((a, b) => b.rating - a.rating)
+    else if (sortBy === 'Lowest Rated') result.sort((a, b) => a.rating - b.rating)
+    else if (sortBy === 'Most Reviews') result.sort((a, b) => b.reviews - a.reviews)
+
+    setFiltered(result)
+  }, [search, neighbourhood, sortBy])
+
+  function handleSignOut() {
+    logout()
+    navigate('/login')
+  }
+
+  const totalReviews = mockApartments.reduce((sum, a) => sum + a.reviews, 0)
+
   return (
     <div className="dashboard">
       <nav className="dash-nav">
@@ -113,12 +95,14 @@ export default function Dashboard({ user, onSignOut }) {
             className="dash-search"
             type="text"
             placeholder="Search apartments by address or neighbourhood..."
+            value={search}
+            onChange={e => setSearch(e.target.value)}
           />
         </div>
         <div className="dash-user">
-          <div className="avatar">{user?.initials || 'AM'}</div>
-          <span className="username">{user?.name || 'Alex'}</span>
-          <button className="btn-ghost signout" onClick={onSignOut}>Sign out</button>
+          <div className="avatar">{user?.initials || user?.name?.[0]?.toUpperCase()}</div>
+          <span className="username">{user?.name}</span>
+          <button className="btn-signout" onClick={handleSignOut}>Sign out</button>
         </div>
       </nav>
 
@@ -129,29 +113,28 @@ export default function Dashboard({ user, onSignOut }) {
         </div>
 
         <div className="dash-stats">
-          <button className="stat-pill active">5 apartments</button>
-          <button className="stat-pill">13 reviews</button>
-          <button className="stat-pill">4 neighbourhoods</button>
+          <button className="stat-pill active">{mockApartments.length} apartments</button>
+          <button className="stat-pill">{totalReviews} reviews</button>
+          <button className="stat-pill">{neighbourhoods.length - 1} neighbourhoods</button>
         </div>
 
         <div className="dash-filters">
-          <select className="filter-select">
-            <option>All Neighbourhoods</option>
-            <option>South End</option>
-            <option>Downtown</option>
-            <option>Spring Garden</option>
-            <option>West End</option>
+          <select className="filter-select" value={neighbourhood} onChange={e => setNeighbourhood(e.target.value)}>
+            {neighbourhoods.map(n => <option key={n}>{n}</option>)}
           </select>
-          <select className="filter-select">
+          <select className="filter-select" value={sortBy} onChange={e => setSortBy(e.target.value)}>
             <option>Highest Rated</option>
-            <option>Most Reviews</option>
             <option>Lowest Rated</option>
+            <option>Most Reviews</option>
           </select>
         </div>
 
-        <div className="apt-grid">
-          {apartments.map(apt => <ApartmentCard key={apt.id} apt={apt} />)}
-        </div>
+        {filtered.length === 0
+          ? <div className="no-results">No apartments match your search.</div>
+          : <div className="apt-grid">
+              {filtered.map(apt => <ApartmentCard key={apt.id} apt={apt} />)}
+            </div>
+        }
       </main>
     </div>
   )
