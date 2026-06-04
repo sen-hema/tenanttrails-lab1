@@ -1,0 +1,147 @@
+.detail-page { min-height: 100vh; background: var(--bg-page); }
+
+.detail-main { max-width: 1100px; margin: 0 auto; padding: 24px 32px 60px; }
+
+.back-link {
+  display: inline-block; margin-bottom: 20px;
+  font-size: 13px; color: var(--blue); font-weight: 500;
+}
+.back-link:hover { text-decoration: underline; }
+
+.detail-layout { display: grid; grid-template-columns: 1fr 280px; gap: 24px; align-items: start; }
+
+/* Header card */
+.detail-header-card {
+  background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-xl);
+  padding: 28px 32px; display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 20px;
+}
+.detail-apt-name { font-size: 26px; font-weight: 700; color: var(--text-primary); margin-bottom: 6px; letter-spacing: -0.4px; }
+.detail-address { font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; }
+.detail-description { font-size: 14px; color: var(--text-secondary); }
+
+.detail-header-right { text-align: right; flex-shrink: 0; }
+.detail-big-rating { font-size: 44px; font-weight: 800; color: var(--blue); line-height: 1; margin-bottom: 4px; }
+.detail-review-count { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+/* AI Summary */
+.ai-summary {
+  background: linear-gradient(135deg, #eff6ff, #f0f9ff);
+  border: 1px solid #bfdbfe; border-radius: var(--radius-xl);
+  padding: 24px 28px; margin-bottom: 20px;
+}
+.ai-summary-label { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 0.8px; margin-bottom: 10px; }
+.ai-summary-text { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 16px; }
+.ai-issues-title { font-size: 13px; font-weight: 600; color: var(--text-primary); margin-bottom: 10px; }
+.ai-issues-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.ai-issue-tag {
+  font-size: 12px; padding: 4px 12px; border-radius: var(--radius-full);
+  background: white; border: 1px solid #bfdbfe; color: var(--blue); font-weight: 500;
+}
+
+/* Reviews section */
+.detail-reviews-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.detail-section-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+.btn-write-review {
+  padding: 8px 16px; border-radius: var(--radius-md); font-size: 13px; font-weight: 600;
+  background: white; border: 1.5px solid var(--blue); color: var(--blue); cursor: pointer;
+  transition: background 0.15s;
+}
+.btn-write-review:hover { background: #eff6ff; }
+
+.reviews-list { display: flex; flex-direction: column; gap: 12px; }
+.review-card {
+  background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 20px 24px;
+}
+.review-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.review-author-row { display: flex; align-items: center; gap: 10px; }
+.review-avatar {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--blue); color: white;
+  font-size: 12px; font-weight: 600; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.review-author-name { font-size: 14px; font-weight: 600; color: var(--text-primary); }
+.review-date { font-size: 12px; color: var(--text-muted); }
+.review-body { font-size: 14px; color: var(--text-secondary); line-height: 1.65; }
+.review-actions { display: flex; gap: 8px; margin-top: 12px; justify-content: flex-end; }
+.review-action-btn {
+  font-size: 12px; padding: 4px 12px; border-radius: var(--radius-md);
+  border: 1px solid var(--border); background: white; color: var(--text-secondary); cursor: pointer;
+}
+.review-action-btn:hover { background: var(--bg-page); }
+.review-action-delete { border-color: #fecaca; color: #dc2626; }
+.review-action-delete:hover { background: #fef2f2; }
+
+.no-reviews { padding: 40px; text-align: center; color: var(--text-muted); font-size: 14px; background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+
+/* Right column cards */
+.detail-right { display: flex; flex-direction: column; gap: 16px; position: sticky; top: 72px; }
+.detail-info-card {
+  background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 24px;
+}
+.detail-info-title { font-size: 15px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+.detail-info-rows { display: flex; flex-direction: column; gap: 12px; }
+.detail-info-row { display: flex; justify-content: space-between; align-items: center; }
+.detail-info-label { font-size: 13px; color: var(--text-muted); }
+.detail-info-value { font-size: 13px; font-weight: 500; color: var(--text-primary); }
+
+/* Rating breakdown */
+.rating-breakdown { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+.breakdown-row { display: flex; align-items: center; gap: 6px; }
+.breakdown-n { font-size: 12px; font-weight: 600; color: var(--text-secondary); width: 10px; text-align: right; }
+.breakdown-star { font-size: 12px; color: var(--star); }
+.breakdown-bar-wrap { flex: 1; height: 6px; background: var(--bg-page); border-radius: 3px; overflow: hidden; }
+.breakdown-bar { height: 100%; background: var(--blue); border-radius: 3px; transition: width 0.3s; }
+.breakdown-count { font-size: 12px; color: var(--text-muted); width: 12px; }
+
+/* Buttons */
+.btn-primary {
+  background: var(--blue); color: white; border: none; border-radius: var(--radius-md);
+  font-size: 14px; font-weight: 600; padding: 10px 20px; cursor: pointer; transition: background 0.15s;
+}
+.btn-primary:hover { background: var(--blue-dark); }
+.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+.btn-full-width { width: 100%; }
+
+/* Modal */
+.modal-overlay {
+  position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.5); display: flex; align-items: center; justify-content: center; z-index: 100;
+}
+.modal-content {
+  background: white; padding: 0; border-radius: var(--radius-xl);
+  width: 100%; max-width: 480px; max-height: 90vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+}
+.modal-header { display: flex; align-items: center; justify-content: space-between; padding: 24px 28px 0; }
+.modal-title { font-size: 18px; font-weight: 700; color: var(--text-primary); }
+.modal-close { background: none; border: none; font-size: 16px; color: var(--text-muted); cursor: pointer; padding: 4px 8px; border-radius: var(--radius-sm); }
+.modal-close:hover { background: var(--bg-page); }
+.modal-body { padding: 20px 28px; display: flex; flex-direction: column; gap: 18px; }
+.modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 0 28px 24px; }
+
+.form-group { display: flex; flex-direction: column; gap: 6px; }
+.form-label { font-size: 13px; font-weight: 600; color: var(--text-primary); }
+.star-input { display: flex; gap: 6px; }
+.star-btn { font-size: 28px; cursor: pointer; transition: transform 0.1s; line-height: 1; }
+.star-btn:hover { transform: scale(1.15); }
+.rating-label { font-size: 12px; color: var(--text-muted); }
+.form-textarea {
+  width: 100%; padding: 10px 14px; font-size: 14px; line-height: 1.6;
+  border: 1.5px solid var(--border); border-radius: var(--radius-md);
+  resize: vertical; font-family: inherit; color: var(--text-primary);
+  transition: border-color 0.15s;
+}
+.form-textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(37,99,235,0.08); outline: none; }
+.form-textarea::placeholder { color: var(--text-muted); }
+
+.btn-secondary {
+  background: white; color: var(--text-secondary); border: 1.5px solid var(--border);
+  border-radius: var(--radius-md); font-size: 14px; font-weight: 600; padding: 10px 20px; cursor: pointer;
+}
+.btn-secondary:hover { background: var(--bg-page); }
+
+@media (max-width: 768px) {
+  .detail-layout { grid-template-columns: 1fr; }
+  .detail-right { position: static; }
+  .detail-main { padding: 16px; }
+}

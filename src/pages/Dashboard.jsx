@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { mockApartments } from '../data/mockData'
 import './Dashboard.css'
@@ -16,31 +16,33 @@ function Stars({ rating }) {
 
 function ApartmentCard({ apt }) {
   return (
-    <div className="apt-card">
-      <div className="apt-img-wrap">
-        <img src={apt.img} alt={apt.name} className="apt-img" />
-        <div className="apt-rating-badge">
-          <span className="rating-star">★</span>
-          {apt.rating.toFixed(1)}
+    <Link to={`/apartment/${apt.id}`} style={{ textDecoration: 'none' }}>
+      <div className="apt-card">
+        <div className="apt-img-wrap">
+          <img src={apt.img} alt={apt.name} className="apt-img" />
+          <div className="apt-rating-badge">
+            <span className="rating-star">★</span>
+            {apt.rating.toFixed(1)}
+          </div>
+        </div>
+        <div className="apt-body">
+          <h3 className="apt-name">{apt.name}</h3>
+          <p className="apt-address">
+            📍 {apt.address} · {apt.neighbourhood}
+          </p>
+          <div className="apt-tags">
+            {apt.noAI
+              ? <span className="tag tag-gray">No AI summary yet</span>
+              : apt.tags.map(t => <span key={t} className="tag">{t}</span>)
+            }
+          </div>
+          <div className="apt-footer">
+            <span className="apt-review-count">{apt.reviews} review{apt.reviews !== 1 ? 's' : ''}</span>
+            <Stars rating={apt.rating} />
+          </div>
         </div>
       </div>
-      <div className="apt-body">
-        <h3 className="apt-name">{apt.name}</h3>
-        <p className="apt-address">
-          📍 {apt.address} · {apt.neighbourhood}
-        </p>
-        <div className="apt-tags">
-          {apt.noAI
-            ? <span className="tag tag-gray">No AI summary yet</span>
-            : apt.tags.map(t => <span key={t} className="tag">{t}</span>)
-          }
-        </div>
-        <div className="apt-footer">
-          <span className="apt-review-count">{apt.reviews} review{apt.reviews !== 1 ? 's' : ''}</span>
-          <Stars rating={apt.rating} />
-        </div>
-      </div>
-    </div>
+    </Link>
   )
 }
 
@@ -100,8 +102,10 @@ export default function Dashboard() {
           />
         </div>
         <div className="dash-user">
-          <div className="avatar">{user?.initials || user?.name?.[0]?.toUpperCase()}</div>
-          <span className="username">{user?.name}</span>
+          <Link to="/profile" className="avatar" style={{ textDecoration: 'none', color: 'white' }}>
+            {user?.initials || user?.name?.[0]?.toUpperCase()}
+          </Link>
+          <Link to="/profile" className="username" style={{ color: 'var(--text-primary)' }}>{user?.name}</Link>
           <button className="btn-signout" onClick={handleSignOut}>Sign out</button>
         </div>
       </nav>

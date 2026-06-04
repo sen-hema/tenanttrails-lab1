@@ -5,6 +5,8 @@ import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Signup from './pages/Signup'
 import Dashboard from './pages/Dashboard'
+import ApartmentDetail from './pages/ApartmentDetail'
+import Profile from './pages/Profile'
 
 export default function App() {
   return (
@@ -17,6 +19,16 @@ export default function App() {
           <Route path="/dashboard" element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          } />
+          <Route path="/apartment/:id" element={
+            <ProtectedRoute>
+              <ApartmentDetail />
+            </ProtectedRoute>
+          } />
+          <Route path="/profile" element={
+            <ProtectedRoute>
+              <Profile />
             </ProtectedRoute>
           } />
           <Route path="*" element={<Navigate to="/" />} />

@@ -1,0 +1,38 @@
+.profile-page { min-height: 100vh; background: var(--bg-page); }
+.profile-main { max-width: 860px; margin: 0 auto; padding: 24px 32px 60px; }
+
+.back-link { display: inline-block; margin-bottom: 20px; font-size: 13px; color: var(--blue); font-weight: 500; }
+.back-link:hover { text-decoration: underline; }
+
+.profile-header-card {
+  background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-xl);
+  padding: 28px 32px; display: flex; align-items: center; gap: 20px; margin-bottom: 32px;
+}
+.profile-avatar-large {
+  width: 64px; height: 64px; border-radius: 50%; background: var(--blue); color: white;
+  font-size: 22px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.profile-info { flex: 1; }
+.profile-name { font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: 4px; }
+.profile-email { font-size: 14px; color: var(--text-secondary); }
+
+.profile-stats { display: flex; gap: 32px; }
+.profile-stat { text-align: center; }
+.profile-stat-number { display: block; font-size: 28px; font-weight: 800; color: var(--blue); line-height: 1; }
+.profile-stat-label { font-size: 11px; font-weight: 600; color: var(--text-muted); letter-spacing: 0.6px; }
+
+.profile-section-title { font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 16px; }
+
+.profile-reviews-list { display: flex; flex-direction: column; gap: 16px; }
+.profile-review-item { background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); overflow: hidden; }
+.profile-review-apt { padding: 12px 24px 0; }
+.profile-apt-link { font-size: 15px; font-weight: 700; color: var(--text-primary); }
+.profile-apt-link:hover { color: var(--blue); }
+.profile-review-item .review-card { border: none; border-radius: 0; }
+
+.no-reviews-profile { padding: 40px; text-align: center; color: var(--text-muted); font-size: 14px; background: var(--bg-white); border: 1px solid var(--border); border-radius: var(--radius-lg); }
+
+@media (max-width: 600px) {
+  .profile-main { padding: 16px; }
+  .profile-header-card { flex-wrap: wrap; }
+}
