@@ -1,42 +1,48 @@
-import { useState } from 'react'
+import { useState, useEffect, useCallback } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { reviews as initialReviews, mockApartments } from '../data/mockData'
 import ReviewCard from '../components/ReviewCard'
 import ReviewDialog from '../components/ReviewDialog'
 import './Profile.css'
 
+const API = import.meta.env.VITE_API_URL
+
 export default function Profile() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
-  const [allReviews, setAllReviews] = useState(initialReviews)
+  const [myReviews, setMyReviews] = useState([])
   const [editingReview, setEditingReview] = useState(null)
+  const [loading, setLoading] = useState(true)
 
-  const myReviews = allReviews.filter(r => r.userId === user?.id)
+  const loadProfile = useCallback(() => {
+    fetch(`${API}/api/auth/me`, { credentials: 'include' })
+      .then(r => r.json())
+      .then(data => { setMyReviews(data.reviews || []); setLoading(false) })
+      .catch(() => setLoading(false))
+  }, [])
 
-  function handleDelete(reviewId) {
-    setAllReviews(prev => prev.filter(r => r.id !== reviewId))
+  useEffect(() => { loadProfile() }, [loadProfile])
+
+  async function handleDelete(reviewId) {
+    await fetch(`${API}/api/reviews/${reviewId}`, {
+      method: 'DELETE',
+      credentials: 'include',
+    })
+    loadProfile()
   }
 
-  function handleEdit(review) {
-    setEditingReview(review)
-  }
-
-  function handleSaveEdit({ rating, body }) {
-    setAllReviews(prev =>
-      prev.map(r => r.id === editingReview.id ? { ...r, rating, body } : r)
-    )
+  async function handleSaveEdit({ rating, body }) {
+    await fetch(`${API}/api/reviews/${editingReview.id}`, {
+      method: 'PUT',
+      credentials: 'include',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ rating, body }),
+    })
     setEditingReview(null)
+    loadProfile()
   }
 
-  function getAptName(aptId) {
-    return mockApartments.find(a => a.id === aptId)?.name || 'Unknown'
-  }
-
-  function handleSignOut() {
-    logout()
-    navigate('/login')
-  }
+  function handleSignOut() { logout(); navigate('/login') }
 
   return (
     <div className="profile-page">
@@ -52,11 +58,8 @@ export default function Profile() {
       <main className="profile-main">
         <Link to="/dashboard" className="back-link">← Back to apartments</Link>
 
-        {/* Profile header */}
         <div className="profile-header-card">
-          <div className="profile-avatar-large">
-            {user?.initials || user?.name?.[0]?.toUpperCase()}
-          </div>
+          <div className="profile-avatar-large">{user?.initials || user?.name?.[0]?.toUpperCase()}</div>
           <div className="profile-info">
             <h1 className="profile-name">{user?.name}</h1>
             <p className="profile-email">{user?.email}</p>
@@ -69,30 +72,33 @@ export default function Profile() {
           </div>
         </div>
 
-        {/* Reviews */}
         <h2 className="profile-section-title">Your Reviews</h2>
 
-        {myReviews.length === 0 ? (
+        {loading && <p>Loading your reviews...</p>}
+
+        {!loading && myReviews.length === 0 && (
           <div className="no-reviews-profile">
             You haven't written any reviews yet.{' '}
             <Link to="/dashboard" className="back-link">Browse apartments →</Link>
           </div>
-        ) : (
+        )}
+
+        {!loading && myReviews.length > 0 && (
           <div className="profile-reviews-list">
             {myReviews.map(r => (
               <div key={r.id} className="profile-review-item">
                 <div className="profile-review-apt">
                   <Link to={`/apartment/${r.aptId}`} className="profile-apt-link">
-                    {getAptName(r.aptId)}
+                    {r.aptName || `Apartment ${r.aptId}`}
                   </Link>
                 </div>
                 <ReviewCard
                   rating={r.rating}
                   body={r.body}
-                  date={r.date}
+                  date={r.date || r.created}
                   author={user.name}
                   onDelete={() => handleDelete(r.id)}
-                  onEdit={() => handleEdit(r)}
+                  onEdit={() => setEditingReview(r)}
                 />
               </div>
             ))}

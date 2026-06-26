@@ -23,12 +23,12 @@ export default function Signup() {
     return e
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
     setServerError('')
     const e = validate()
     if (Object.keys(e).length > 0) { setErrors(e); return }
-    const result = signup(name, email, password)
+    const result = await signup(name, email, password)
     if (result.success) {
       navigate('/dashboard')
     } else {

@@ -19,24 +19,17 @@ export default function Login() {
     return e
   }
 
-  function handleSubmit(event) {
+  async function handleSubmit(event) {
     event.preventDefault()
     setServerError('')
     const e = validate()
     if (Object.keys(e).length > 0) { setErrors(e); return }
-    const result = login(email, password)
+    const result = await login(email, password)
     if (result.success) {
       navigate('/dashboard')
     } else {
       setServerError(result.error)
     }
-  }
-
-  function fillDemo() {
-    setEmail('alex@dal.ca')
-    setPassword('password123')
-    setErrors({})
-    setServerError('')
   }
 
   return (
@@ -79,10 +72,6 @@ export default function Login() {
           Don't have an account?{' '}
           <Link to="/signup" className="auth-link">Create one</Link>
         </p>
-
-        <div className="demo-box" onClick={fillDemo}>
-          Demo: <strong>alex@dal.ca / password123</strong> — click to fill
-        </div>
       </div>
     </div>
   )
